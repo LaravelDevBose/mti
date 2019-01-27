@@ -1,0 +1,16 @@
+/* your styles go here */
+
+.form-group {
+
+    margin-bottom: -25px !important;
+
+}
+.user-btn-cls{
+	margin-top: 25px;
+	margin-bottom: 0 !important;
+}
+
+.product_img{
+	padding: 0;
+}
+
