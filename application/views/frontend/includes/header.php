@@ -33,7 +33,7 @@
 <div class="wrapper row1">
   <header id="header" class="clear"> 
     <div id="logo" class="fl_left">
-      <img src="images/logo.png" style="height: auto; width: 100px; border-radius: 5px;">
+      <img src="<?= base_url();?>assets/frontend/images/logo.png" style="height: auto; width: 100px; border-radius: 5px;">
       <h1 style="display: inline-block;"><a href="<?= base_url(); ?>"><span>MTI Trading Limited</span></a></h1>
     </div>
   </header>
