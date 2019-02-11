@@ -42,7 +42,7 @@ class About extends MY_controller
 	public function update($id,$img_name){
 
 		$config['upload_path']          = './uploads/about/';
-		$config['allowed_types']        = 'jpg|png|jpeg';
+		$config['allowed_types']        = 'jpg|png|jpeg|pdf';
 		$this->load->library('upload', $config);
 
 		$this->form_validation->set_rules('about_title', 'Title', 'required');
@@ -52,10 +52,19 @@ class About extends MY_controller
 		$this->name =ucfirst($this->input->post('type'));
 
 		if($this->form_validation->run() == TRUE):
+            $pdf = $this->input->post('old_pdf');
+
 			if(!isset($_FILES['about_image']) || $_FILES['about_image']['error'] == UPLOAD_ERR_NO_FILE ):
 					
 				$data = $this->input->post();
+                if($this->upload->do_upload('about_pdf') == TRUE){
+                    $pdf_data = $this->upload->data();
+                        unlink('uploads/about/'.$pdf);
+                    $data['pdf_path'] = $pdf_data['raw_name'].$pdf_data['file_ext'];
+                }
+
 				unset($data['submit']);
+                unset($data['old_pdf']);
 				return $this->set_flash_redir($this->model->update($id,$data),
 				 							$this->name." Updated Successfully",
 				 							"Failed to Update!");
@@ -63,10 +72,20 @@ class About extends MY_controller
 				if($this->upload->do_upload('about_image') == TRUE):
 					$data = $this->input->post();
 					unset($data['submit']);
+                    unset($data['old_pdf']);
 
 					$img_data = $this->upload->data();	
 					$data['about_image_path'] = $img_data['raw_name'].$img_data['file_ext'];
 					unlink('uploads/about/'.$img_name);
+                    if($this->upload->do_upload('about_pdf') == TRUE){
+                        $pdf_data = $this->upload->data();
+                        if(file_exists('uploads/about/'.$pdf)){
+                            unlink('uploads/about/'.$pdf);
+                        }
+
+                        $data['pdf_path'] = $pdf_data['raw_name'].$pdf_data['file_ext'];
+                    }
+
 					return $this->set_flash_redir($this->model->update($id,$data),
 					 $this->name." Updated Successfully","Failed to Update!");
 				else:

@@ -99,6 +99,30 @@
               </div>
 
               <div class="form-group row">
+                  <label class="col-sm-2 form-control-label">PDF</label>
+                  <div class="col-sm-8">
+                      <?php
+                      $about_pdf = array(
+                          'name'          => 'about_pdf',
+                          'class'         => 'form-control-file product_img',
+                          'value'         => set_value('about_pdf'),
+                      );
+
+                      echo form_upload($about_pdf);
+                      ?>
+                      <span class="text-small text-gray help-block-none">
+                    <?php if(isset($error)) echo $error; ?>
+                  </span>
+                  </div>
+                  <input type="hidden" name="old_pdf" value="<?= $aboutFetchData->pdf_path?>">
+                  <div class="col-sm-2">
+                      <?php if(! is_null($aboutFetchData->pdf_path)):?>
+                      <embed  src="<?php echo base_url('uploads/about/'.$aboutFetchData->pdf_path)?>" height=100 width=100>
+                      <?php endif;?>
+                  </div>
+              </div>
+
+              <div class="form-group row">
                 <div class="col-sm-4 offset-sm-2">
 
 

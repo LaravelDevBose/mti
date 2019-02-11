@@ -21,7 +21,7 @@ class Seller extends MY_Controller
 | Initilize Every Controller 
 |----------------------------------------------------------------------------------------
 */
-	
+	 
 	function __construct(){
 		parent::__construct();
 		if (!$this->Usermodel->is_user_loged_in()){
@@ -29,7 +29,7 @@ class Seller extends MY_Controller
 		}
 		$this->load->model($this->modelname,'model');
 	}
-
+	 
 	public function preview_all(){
 		$data['allFetchData'] = $this->model->get_all();
 		$this->set_data_view($this->name,'all',$data);

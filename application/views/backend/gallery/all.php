@@ -53,15 +53,37 @@
                   </span>
                 </div>
               </div>
-
-
               <div class="form-group row">
+                  <label class="col-sm-2 form-control-label">Gallery Type</label>
+                  <div class="col-sm-10">
+                      <select name="gallery_type" id="gallery_type" class="form-control  ">
+                          <option value="image">Image</option>
+                          <option value="video">Video</option>
+                      </select>
+                      <span class="text-small text-gray help-block-none">
+                    <?php echo form_error('gallery_title')?>
+                  </span>
+                  </div>
+              </div>
+
+              <div class="form-group row" id="video" style="display: none;">
+                  <label class="col-sm-2 form-control-label">Video Link</label>
+                  <div class="col-sm-10">
+                      <input type="text" name="gallery_image_path" id="video_path" class="form-control">
+                      <span class="text-small text-gray help-block-none">
+                    <?php echo form_error('gallery_title')?>
+                  </span>
+                  </div>
+              </div>
+
+              <div class="form-group row" id="image">
                 <label class="col-sm-2 form-control-label">Image (640 X 480)</label>
                 <div class="col-sm-10">
                   <?php 
                   $gallery_image = array(
                     'name'          => 'gallery_image',
-                    'class'         => 'form-control product_img',
+                    'class'         => 'form-control-file product_img',
+                    'id'            =>'image_path',
                     // 'required'      => 'required',
                     'value'         => set_value('gallery_image'), 
                   );
@@ -126,19 +148,26 @@
                         foreach ($allFetchData as $data):?>
                   <tr>
                     <th scope="row"><?php echo $data->gallery_id?></th>
-                      
+                      <?php if($data->gallery_type == 'image'):?>
                     <td>
                       <?php if(! is_null($data->gallery_image_path)):?>
                     <img src="<?php echo base_url('uploads/'.$data->gallery_image_path)?>" height=100 width=100>
                       <?php endif;?>
                     </td>
+                      <?php else: ?>
+                          <td>
+                              <?php if(! is_null($data->gallery_image_path)):?>
+                                  <iframe width="100" height="100" src="<?php echo $data->gallery_image_path?>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                              <?php endif;?>
+                          </td>
+                      <?php endif;?>
 
                     <td><?php echo $data->gallery_title?></td>
 
                     <td>
                       <a href="<?php echo base_url(); ?>EditGallery/<?php echo $data->gallery_id; ?>" class="btn btn-success btn-sm" d ><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
 
-                      <a onclick="return confirm('Are you sure to delete ? ')" href="<?php echo base_url(); ?>DeleteGallery/<?php echo $data->gallery_id; ?>/<?php echo $data->gallery_image_path; ?>"  title="Delete This"  class="btn btn-danger btn-sm"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                      <a onclick="return confirm('Are you sure to delete ? ')" href="<?php echo base_url(); ?>DeleteGallery/<?php echo $data->gallery_id; ?>"  title="Delete This"  class="btn btn-danger btn-sm"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
 
                     </td>
                   </tr>
@@ -154,3 +183,4 @@
     </div>
   </div>
 </section>
+

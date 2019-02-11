@@ -10,7 +10,13 @@
       <div class="one_third">
         <address>
         <?= $contactUs->contact_location ?>
-        <i class="fa fa-phone pright-10"></i><?= $contactUs->contact_phone; ?> <br>
+            <?php
+            $phoneNo = $this->db->select('contact_phone')->where('del_status','0')->get('tbl_contact_us')->result();
+            if(isset($phoneNo) && $phoneNo){
+                foreach($phoneNo as $phone){
+            ?>
+            <i class="fa fa-phone pright-10"></i><?= $phone->contact_phone; ?> <br>
+            <?php }}?>
         <i class="fa fa-envelope-o pright-10"></i> <a href="#"><?= $contactUs->contact_email; ?></a>
         </address>
       </div>

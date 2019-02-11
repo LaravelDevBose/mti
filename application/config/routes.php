@@ -29,20 +29,13 @@ $route['production_unit/(:any)']	= 	'Home/production_unit_view/$1';
 $route['about_us']					=	'Home/about_us_page';
 $route['profile']					=	'Home/profile_page';
 $route['galary']					=	'Home/galary_page';
+$route['galary']					=	'Home/galary_page';
 $route['news_events']				=	'Home/news_event_page';
 $route['news/(:num)']				=	'Home/news_page/$1';
 $route['contact_us']				= 	'Home/contact_us_page';
 
 //Login Page Routing
 $route['Login/admin'] 			= 'Login/preview_login_page';
-
-
-
-
-
-
-
-
 
 
 /*
@@ -228,11 +221,11 @@ $route['GalleryCrud'] = 'Gallery/preview_all';
 
 $route['CreateGallery'] = 'Gallery/create';
 
-$route['DeleteGallery/(:any)/(:any)'] = 'Gallery/hard_delete/$1/$2'; 
+$route['DeleteGallery/(:any)'] = 'Gallery/hard_delete/$1';
 
 $route['EditGallery/(:num)'] = 'Gallery/edit/$1';
 
-$route['UpdateGallery/(:any)/(:any)'] = 'Gallery/update/$1/$2'; 
+$route['UpdateGallery/(:any)'] = 'Gallery/update/$1';
 
 
 /*

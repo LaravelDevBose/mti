@@ -45,29 +45,49 @@ class Gallery extends MY_Controller
 		$this->load->library('upload', $config);
 
 		$this->form_validation->set_rules('gallery_title', 'Title', 'required');
-		if($this->form_validation->run() == TRUE && $this->upload->do_upload('gallery_image') == TRUE):
-			$data = $this->input->post();
-			unset($data['submit']);
+		if($this->form_validation->run() == TRUE) {
+		    if($this->input->post('gallery_type') == 'image'){
+                if ($this->upload->do_upload('gallery_image') == TRUE) {
+                    $data = $this->input->post();
+                    unset($data['submit']);
 
-			$img_data = $this->upload->data();	
-			$data['gallery_image_path'] = $img_data['raw_name'].$img_data['file_ext'];
-			return $this->set_flash_redir($this->model->insert($data),
-				$this->name." Created Successfully",
-				"Failed to Create!");
-			
-		else:
-			$data['allFetchData'] = $this->model->get_all();
-			$data['error'] = $this->upload->display_errors();
-			$this->set_data_view('Gallery','all',$data);
-		endif;
+                    $img_data = $this->upload->data();
+                    $data['gallery_image_path'] = $img_data['raw_name'] . $img_data['file_ext'];
+                    return $this->set_flash_redir($this->model->insert($data),
+                        $this->name . " Created Successfully",
+                        "Failed to Create!");
+                }else{
+                    $data['allFetchData'] = $this->model->get_all();
+                    $data['error'] = $this->upload->display_errors();
+                    $this->set_data_view('Gallery', 'all', $data);
+                }
+            }else{
+                $data = $this->input->post();
+                unset($data['submit']);
+                return $this->set_flash_redir($this->model->insert($data),
+                    $this->name . " Created Successfully",
+                    "Failed to Create!");
+            }
+
+        }else {
+            $data['allFetchData'] = $this->model->get_all();
+            $data['error'] = $this->upload->display_errors();
+            $this->set_data_view('Gallery', 'all', $data);
+        }
 	}
 
 
-	public function hard_delete($id,$img_name){	
+	public function hard_delete($id){
+	    $info = $this->db->where('gallery_id', $id)->get('tbl_gallery')->row();
+
 		$res = $this->model->hard_delete($id);
 
 		if($res){
-			unlink('uploads/'.$img_name);
+		    if($info->gallary_type == 'image'){
+                $img_name = $info->gallery_image_path;
+                unlink('uploads/'.$img_name);
+            }
+
 			$this->set_flash_redir($res,"Delete Successfully","Delete Failed");
 		}
 		else{
@@ -83,7 +103,7 @@ class Gallery extends MY_Controller
 	}
 
 
-	public function update($id,$img_name){
+	public function update($id){
 
 		$config['upload_path']          = './uploads/';
 		$config['allowed_types']        = 'jpg|png|jpeg';
@@ -91,34 +111,45 @@ class Gallery extends MY_Controller
 
 		$this->form_validation->set_rules('gallery_title', 'Title', 'required');
 
-		if($this->form_validation->run() == TRUE):
-			if(!isset($_FILES['gallery_image']) || $_FILES['gallery_image']['error'] == UPLOAD_ERR_NO_FILE ):
-					
-				$data = $this->input->post();
-				unset($data['submit']);
-				return $this->set_flash_redir($this->model->update($id,$data),
-				 							$this->name." Updated Successfully",
-				 							"Failed to Update!");
-			else:
-				if($this->upload->do_upload('gallery_image') == TRUE):
-					$data = $this->input->post();
-					unset($data['submit']);
+		if($this->form_validation->run() == TRUE) {
 
-					$img_data = $this->upload->data();	
-					$data['gallery_image_path'] = $img_data['raw_name'].$img_data['file_ext'];
-					unlink('uploads/'.$img_name);
-					return $this->set_flash_redir($this->model->update($id,$data),
-					 							$this->name." Updated Successfully",
-					 							"Failed to Update!");
-				else:
-					$data['allFetchData'] = $this->model->findOrFail($id);
-					$data['error'] = $this->upload->display_errors();
-					$this->set_data_view('Edit Gallery','edit',$data);
-				endif;
-			endif;
-		else:
-			$this->edit($id);
-		endif;
+            if($this->input->post('gallery_type') == 'video'){
+                $data = $this->input->post();
+                unset($data['submit']);
+                return $this->set_flash_redir($this->model->update($id, $data),
+                    $this->name . " Updated Successfully",
+                    "Failed to Update!");
+            }else{
+                $img_name = $this->input->post('old_path');
+                if (!isset($_FILES['gallery_image']) || $_FILES['gallery_image']['error'] == UPLOAD_ERR_NO_FILE) {
+
+                    $data = $this->input->post();
+                    unset($data['submit']);
+                    unset($data['old_path']);
+                    return $this->set_flash_redir($this->model->update($id, $data),
+                        $this->name . " Updated Successfully",
+                        "Failed to Update!");
+                }else {
+                    if ($this->upload->do_upload('gallery_image') == TRUE):
+                        $data = $this->input->post();
+                        unset($data['submit']);
+                        unset($data['old_path']);
+                        $img_data = $this->upload->data();
+                        $data['gallery_image_path'] = $img_data['raw_name'] . $img_data['file_ext'];
+                        unlink('uploads/' . $img_name);
+                        return $this->set_flash_redir($this->model->update($id, $data),
+                            $this->name . " Updated Successfully",
+                            "Failed to Update!");
+                    else:
+                        $data['allFetchData'] = $this->model->findOrFail($id);
+                        $data['error'] = $this->upload->display_errors();
+                        $this->set_data_view('Edit Gallery', 'edit', $data);
+                    endif;
+                }
+            }
+        }else{
+            $this->edit($id);
+        }
 	}
 
 

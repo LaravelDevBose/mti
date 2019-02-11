@@ -2,7 +2,8 @@
 <div class="container">
     <div id="carouselExample" class="carousel slide" data-ride="carousel" data-interval="9000">
         <div class="carousel-inner row w-100 mx-auto" role="listbox">
-            <?php foreach($galarys as $galary):?>
+            <?php foreach($galarys as $galary): if($galary->gallery_type == 'image'):?>
+
             <div class="carousel-item col-md-3 <?= ($i==0)?'active':''?>">
                 <div class="panel panel-default">
                     <div class="panel-thumbnail">
@@ -12,7 +13,7 @@
                     </div>
                 </div>
             </div>
-            <?php $i=1; endforeach; ?>
+            <?php $i=1; endif; endforeach; ?>
         </div>
         <a class="carousel-control-prev" href="#carouselExample" role="button" data-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>

@@ -28,7 +28,7 @@
 
   
   <!--/Rich Text Box Links -->
-  <script src="https://cdn.ckeditor.com/4.10.1/standard/ckeditor.js"></script>
+    <script src="<?= base_url() ?>assets/backend/ckeditor/ckeditor.js"></script>
   <!--//Rich Text Box Links -->
   
 
@@ -165,7 +165,20 @@
   </body>
   </html>
 
-
+<script>
+    $('#gallery_type').change(function(e){
+        var type = e.target.value;
+        if(type == 'image'){
+            $('#image').show();
+            $('#video').hide();
+            $('#video_path').val('');
+        }else{
+            $('#video').show();
+            $('#image').hide();
+            $('#image_path').val('');
+        }
+    });
+</script>
 <script type="text/javascript">
 
 $(document).ready(function(){

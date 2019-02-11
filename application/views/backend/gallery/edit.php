@@ -33,7 +33,7 @@
 
 
           <div class="card-body">
-            <?php echo form_open_multipart('UpdateGallery/'.$allFetchData->gallery_id.'/'.$allFetchData->gallery_image_path,['class'=>'form-horizontal']);?>
+            <?php echo form_open_multipart('UpdateGallery/'.$allFetchData->gallery_id,['class'=>'form-horizontal']);?>
               
               <div class="form-group row">
                 <label class="col-sm-2 form-control-label">Title</label>
@@ -53,9 +53,33 @@
                   </span>
                 </div>
               </div>
-
-
               <div class="form-group row">
+                  <label class="col-sm-2 form-control-label">Gallery Type</label>
+                  <div class="col-sm-10">
+                      <select name="gallery_type" id="gallery_type" class="form-control" readonly>
+                          <?php if($allFetchData->gallery_type == 'image'){?>
+                          <option value="image" >Image</option>
+                          <?php }else{?>
+                          <option value="video" >Video</option>
+                          <?php }?>
+                      </select>
+                      <span class="text-small text-gray help-block-none">
+                    <?php echo form_error('gallery_title')?>
+                  </span>
+                  </div>
+              </div>
+                <?php if($allFetchData->gallery_type == 'video'){?>
+              <div class="form-group row" id="video" >
+                  <label class="col-sm-2 form-control-label">Video Link</label>
+                  <div class="col-sm-10">
+                      <input type="text" name="gallery_image_path" value="<?= $allFetchData->gallery_image_path ?>" id="video_path" class="form-control">
+                      <span class="text-small text-gray help-block-none">
+                    <?php echo form_error('gallery_title')?>
+                  </span>
+                  </div>
+              </div>
+                <?php }else{?>
+              <div class="form-group row" id="image">
                 <label class="col-sm-2 form-control-label">Image (640 X 480)</label>
                 <div class="col-sm-8">
                   <?php 
@@ -72,16 +96,13 @@
                     <?php if(isset($error)) echo $error;?>
                   </span>
                 </div>
+                  <input type="hidden" name="old_path" value="<?= $allFetchData->gallery_image_path?>">
                 <div class="col-sm-2">
                   
                 <img src="<?php echo base_url('uploads/'.$allFetchData->gallery_image_path)?>" height=100 width=100> 
                 </div>
-
-
-
-
-
               </div>
+              <?php }?>
 
               
               <div class="form-group row">
